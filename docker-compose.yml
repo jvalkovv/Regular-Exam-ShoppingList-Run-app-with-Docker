@@ -1,0 +1,37 @@
+services:
+  mongodb:
+    image: mongo
+    volumes:
+      - data:/data/db
+    env_file:
+      - ./env/mongo.env
+    networks:
+      - reactapp
+
+  backend:
+    build: ./backend
+    volumes:
+      - logs:/logs
+      - /backend/node_modules
+    ports:
+      - 80:80
+    env_file:
+      - ./env/backend.env
+    networks:
+      - reactapp
+
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend/src:/backend/src
+    ports:
+      - "3000:3000"
+    networks:
+      - reactapp
+
+networks:
+  reactapp:
+
+volumes:
+  data:
+  logs:
